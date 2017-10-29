@@ -1,0 +1,9 @@
+{
+  "name": "iole-nodejs",
+  "version": "1.0.0",
+  "description": "Education empowered by Machine Learning Visualization and Tools",
+  "main": "index.js",
+  "repository": "https://github.com/scrums/iole-nodejs.git",
+  "author": "Hansel Wei <hwei3@uncc.edu>, Mariah Olson <molson@uncc.edu>, Raul Calcamo <rcalcamo@uncc.edu> ",
+  "license": "MIT"
+}
