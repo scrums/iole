@@ -16,49 +16,148 @@ class App extends Component {
         <div className = "Description">
         </div>
         <div classNamme = "Graph">
-        var node = document.createElement('div');
-        var diameter = 960,
-          format = d3.format(",d"),
-          color = d3.scale.category20c();
+        'use strict';
 
-        var bubble = d3.layout.pack()
-          .sort(null)
-          .size([diameter, diameter])
-          .padding(1.5);
+      var React = require('react');
+      var d3 = require('d3');
+      var { Chart, XAxis, YAxis, Tooltip} = require('../common');
+      var DataSeries = require('./DataSeries');
+      var utils = require('../utils');
+      var { CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin, TooltipMixin } = require('../mixins');
 
-        var svg = d3.select('node').append("svg")
-            .attr("width", diameter)
-            .attr("height", diameter)
-            .attr("class", "bubble");
+      module.exports = React.createClass({
 
-        d3.json("flare.json", function(error, root) {
-        //  if (error) throw error;
+        mixins: [ CartesianChartPropsMixin, DefaultAccessorsMixin, ViewBoxMixin, TooltipMixin ],
 
-        var bubbles = svg.selectAll(".node")
-            .data(bubble.nodes(classes(flare))
-            .filter(function(d) { return !d.children; }))
-            .enter().append("g")
-            .attr("class", "node")
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        displayName: 'LineChart',
 
-            class my_First_React_D3_Library_Component extends React.Component {
+        propTypes: {
+          circleRadius:   React.PropTypes.number,
+          hoverAnimation: React.PropTypes.bool,
+          margins:        React.PropTypes.object,
+        },
 
-            constructor(props) {
-              super(props);
-              this.state = {d3: ''}
-            }
+        getDefaultProps() {
+          return {
+            circleRadius:    3,
+            className: 'rd3-linechart',
+            hoverAnimation: true,
+            margins:        {top: 10, right: 20, bottom: 50, left: 45},
+            xAxisClassName: 'rd3-linechart-xaxis',
+            yAxisClassName: 'rd3-linechart-yaxis',
+          };
+        },
 
-            componentDidMount() {
-              this.setState({d3: node});
-            }
+        _calculateScales: utils.calculateScales,
 
-            render() {
-              return (
-                <div>
-                  <RD3Component data={this.state.d3} />
-                </div>
-              )
-            }
+        render() {
+
+          var props = this.props;
+
+          if (this.props.data && this.props.data.length < 1) {
+            return null;
+          }
+
+          var {innerWidth, innerHeight, trans, svgMargins} = this.getDimensions();
+          var yOrient = this.getYOrient();
+          var domain = props.domain || {};
+
+          if (!Array.isArray(props.data)) {
+            props.data = [props.data];
+          }
+
+          // Returns an object of flattened allValues, xValues, and yValues
+          var flattenedData = utils.flattenData(props.data, props.xAccessor, props.yAccessor);
+
+          var allValues = flattenedData.allValues,
+              xValues = flattenedData.xValues,
+              yValues = flattenedData.yValues;
+          var scales = this._calculateScales(innerWidth, innerHeight, xValues, yValues, domain.x, domain.y);
+
+          return (
+            <span onMouseLeave={this.onMouseLeave}>
+              <Chart
+                viewBox={this.getViewBox()}
+                legend={props.legend}
+                data={props.data}
+                margins={props.margins}
+                colors={props.colors}
+                colorAccessor={props.colorAccessor}
+                width={props.width}
+                height={props.height}
+                title={props.title}
+                shouldUpdate={!this.state.changeState}
+              >
+                <g transform={trans} className={props.className}>
+                  <XAxis
+                    xAxisClassName={props.xAxisClassName}
+                    strokeWidth={props.xAxisStrokeWidth}
+                    xAxisTickValues={props.xAxisTickValues}
+                    xAxisTickInterval={props.xAxisTickInterval}
+                    xAxisOffset={props.xAxisOffset}
+                    xScale={scales.xScale}
+                    xAxisLabel={props.xAxisLabel}
+                    xAxisLabelOffset={props.xAxisLabelOffset}
+                    tickFormatting={props.xAxisFormatter}
+                    xOrient={props.xOrient}
+                    yOrient={yOrient}
+                    data={props.data}
+                    margins={svgMargins}
+                    width={innerWidth}
+                    height={innerHeight}
+                    horizontalChart={props.horizontal}
+                    stroke={props.axesColor}
+                    gridVertical={props.gridVertical}
+                    gridVerticalStroke={props.gridVerticalStroke}
+                    gridVerticalStrokeWidth={props.gridVerticalStrokeWidth}
+                    gridVerticalStrokeDash={props.gridVerticalStrokeDash}
+                  />
+                  <YAxis
+                    yAxisClassName={props.yAxisClassName}
+                    strokeWidth={props.yAxisStrokeWidth}
+                    yScale={scales.yScale}
+                    yAxisTickValues={props.yAxisTickValues}
+                    yAxisTickCount={props.yAxisTickCount}
+                    yAxisOffset={props.yAxisOffset}
+                    yAxisLabel={props.yAxisLabel}
+                    yAxisLabelOffset={props.yAxisLabelOffset}
+                    tickFormatting={props.yAxisFormatter}
+                    xOrient={props.xOrient}
+                    yOrient={yOrient}
+                    margins={svgMargins}
+                    width={innerWidth}
+                    height={innerHeight}
+                    horizontalChart={props.horizontal}
+                    stroke={props.axesColor}
+                    gridHorizontal={props.gridHorizontal}
+                    gridHorizontalStroke={props.gridHorizontalStroke}
+                    gridHorizontalStrokeWidth={props.gridHorizontalStrokeWidth}
+                    gridHorizontalStrokeDash={props.gridHorizontalStrokeDash}
+                  />
+                  <DataSeries
+                    xScale={scales.xScale}
+                    yScale={scales.yScale}
+                    xAccessor={props.xAccessor}
+                    yAccessor={props.yAccessor}
+                    hoverAnimation={props.hoverAnimation}
+                    circleRadius={props.circleRadius}
+                    data={props.data}
+                    value={allValues}
+                    interpolationType={props.interpolationType}
+                    colors={props.colors}
+                    colorAccessor={props.colorAccessor}
+                    width={innerWidth}
+                    height={innerHeight}
+                    onMouseOver={this.onMouseOver}
+                    />
+                </g>
+              </Chart>
+              {(props.showTooltip ? <Tooltip {...this.state.tooltip}/> : null)}
+            </span>
+          );
+        }
+
+      });
       </div>
     );
   }
