@@ -35,7 +35,7 @@ class App extends Component {
             .attr("class", "bubble");
 
         d3.json("flare.json", function(error, root) {
-          if (error) throw error;
+        //  if (error) throw error;
 
         var bubbles = svg.selectAll(".node")
             .data(bubble.nodes(classes(flare))
