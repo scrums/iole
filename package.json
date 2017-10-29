@@ -5,5 +5,12 @@
   "main": "index.js",
   "repository": "https://github.com/scrums/iole-nodejs.git",
   "author": "Hansel Wei <hwei3@uncc.edu>, Mariah Olson <molson@uncc.edu>, Raul Calcamo <rcalcamo@uncc.edu> ",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "browserify": "^14.5.0",
+    "express": "^4.16.2",
+    "react": "^16.0.0",
+    "react-d3-library": "^1.1.8",
+    "webpack": "^3.8.1"
+  }
 }
