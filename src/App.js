@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import rd3 from 'react-d3-library';
-import node from 'd3file';
-const RD3Component = rd3.Component;
 
 class App extends Component {
   render() {
@@ -16,6 +13,8 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
+<<<<<<< HEAD
+=======
         <div className = "Description">
         </div>
         <div classNamme = "Graph">
@@ -62,6 +61,7 @@ class App extends Component {
                 </div>
               )
             }
+>>>>>>> b138cf1e0f0a2c3b5c65dde3410feae268220774
       </div>
     );
   }
