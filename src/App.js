@@ -13,8 +13,6 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-<<<<<<< HEAD
-=======
         <div className = "Description">
         </div>
         <div classNamme = "Graph">
@@ -61,7 +59,6 @@ class App extends Component {
                 </div>
               )
             }
->>>>>>> b138cf1e0f0a2c3b5c65dde3410feae268220774
       </div>
     );
   }
